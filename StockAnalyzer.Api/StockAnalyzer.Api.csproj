@@ -1,0 +1,12 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>netstandard1.4</TargetFramework>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="htmlagilitypack" Version="1.5.1" />
+    <PackageReference Include="system.data.sqlclient" Version="4.3.1" />
+    <PackageReference Include="System.dynamic.runtime" Version="4.3.0" />
+    <PackageReference Include="System.Net.Requests" Version="4.3.0" />
+    <PackageReference Include="system.threading.thread" Version="4.3.0" />
+  </ItemGroup>
+</Project>
