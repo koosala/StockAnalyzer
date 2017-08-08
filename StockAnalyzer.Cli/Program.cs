@@ -26,10 +26,9 @@ namespace StockAnalyzer.Cli
                                 break;
                     case "3":   new Processor().DownloadCompanies();
                                 break;
-                    case "5":   Console.WriteLine("Add All Years' data? (Y/N)");
-                                var response = Console.ReadLine();
-                                var addAllYears = response.ToLower() == "y";
-                                new Processor().GenerateSpreadSheet(addAllYears);
+                    case "5":   Console.WriteLine("Enter Company Code");
+                                var companyCode = Console.ReadLine();
+                                new Processor().GenerateSpreadSheet(true, companyCode);
                                 break;
                     default:    break;
                 }

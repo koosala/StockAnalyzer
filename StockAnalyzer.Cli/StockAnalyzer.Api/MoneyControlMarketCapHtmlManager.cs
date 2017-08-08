@@ -47,7 +47,7 @@ namespace StockAnalyzer.Api
             }
         }
 
-        public DataTable GetAllFilesData(string mCapFile, string mCapCacheDir)
+        public DataTable GetAllFilesData(string mCapFile, string mCapCacheDir, string companyCode)
         {
             string[] fileNames = File.ReadAllLines(mCapFile);
             foreach (var fileName in fileNames)

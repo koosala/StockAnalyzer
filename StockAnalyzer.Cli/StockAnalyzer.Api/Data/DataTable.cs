@@ -10,6 +10,12 @@ namespace StockAnalyzer.Api.Data
     public class DataTable : IEnumerable, INotifyCollectionChanged
     {
         private IList<DataColumn> columns;
+
+        public DataTable()
+        {
+            columns = new List<DataColumn>();
+        }
+
         private ObservableCollection<DataRow> rows;
         private IList internalView;
         private Type elementType;
@@ -20,11 +26,6 @@ namespace StockAnalyzer.Api.Data
         {
             get
             {
-                if (columns == null)
-                {
-                    columns = new List<DataColumn>();
-                }
-
                 return columns;
             }
         }
@@ -132,6 +133,16 @@ namespace StockAnalyzer.Api.Data
             {
                 handler(this, e);
             }
+        }
+
+        public bool ContainsColumn(string columnName)
+        {
+            foreach (var column in this.columns)
+            {
+                if (column.ColumnName == columnName) return true;
+            }
+
+            return false;
         }
     }
 }

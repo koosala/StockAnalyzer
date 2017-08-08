@@ -12,7 +12,7 @@ namespace StockAnalyzer.Cli.Web
         
         public const string MethodPost = "POST";
         public const string MethodGet = "GET";
-        public string Method { get; set }
+        public string Method { get; set; }
         public string Uri { get; set; }
         public string PostContent { get; set; }
         private HttpClient Client { get; set; }

@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.IO;
 using StockAnalyzer.Api;
 using StockAnalyzer.Api.Data;
+using StockAnalyzer.Cli.Web;
 
 namespace StockAnalyzer.Cli
 {
@@ -64,7 +65,7 @@ namespace StockAnalyzer.Cli
 
             string urlType = type == Bal ? "balance-sheetVI" : type == Prof ? "profit-lossVI" : "cash?";
             string postType = type == Bal ?  "balance_VI" : type == Prof ? "profit_VI" : "cash?";
-            var request = new HttpReqManager2()
+            var request = new HttpRequestManager()
             {
                 // Uri = $"{MCStocks}{financials}{company}&type=balance"
                 Uri = $"{MCStocks}{urlType}/{company}",
@@ -109,7 +110,7 @@ namespace StockAnalyzer.Cli
                         Uri = $"{MCStocks}marketinfo/marketcap/bse/" + category
                     };
                     currentFile = request.Uri;
-                    File.WriteAllText(MCapCacheDir + category, request.GetResponseContent());
+                    File.WriteAllText(MCapCacheDir + category, request.GetData());
                     Console.WriteLine($"Downloaded file: {currentFile}");
                 }
             }
@@ -119,27 +120,29 @@ namespace StockAnalyzer.Cli
             }
         }
 
-        public void GenerateSpreadSheet(bool addAllYears)
+        public void GenerateSpreadSheet(bool addAllYears, string companyCode)
         {
             try
             {
                 File.WriteAllText($"{CacheDir}Results.csv", String.Empty);
                 String[] companies = File.ReadAllText($"{CacheDir}CompaniesList.txt").Split(new string[] { Environment.NewLine }, StringSplitOptions.None);
-                DataTable marketCapData = new MoneyControlMarketCapHtmlManager().GetAllFilesData(MCapFile, MCapCacheDir);
+                // DataTable marketCapData = new MoneyControlMarketCapHtmlManager().GetAllFilesData(MCapFile, MCapCacheDir, companyCode);
                 DataTable allData = new DataTable();
-                foreach (string companyId in companies)
-                {
-                    if (File.Exists($"{CompanyCacheDir}{companyId}_profit.html") && File.Exists($"{CompanyCacheDir}{companyId}_balance.html"))
+                DataTable marketCapData = new DataTable();
+                // foreach (string companyId in companies)
+                // {
+                    if (File.Exists($"{CompanyCacheDir}{companyCode}_prof_0.html") && File.Exists($"{CompanyCacheDir}{companyCode}_bal_0.html"))
                     {
-                        string profitResponse = File.ReadAllText($"{CompanyCacheDir}{companyId}_profit.html");
-                        string balanceResponse = File.ReadAllText($"{CompanyCacheDir}{companyId}_balance.html");
-                        new MoneyControlHtmlManager(profitResponse, balanceResponse, marketCapData, allData).PopulateCompanyDetails(companyId, addAllYears);
+                        string profitResponse = File.ReadAllText($"{CompanyCacheDir}{companyCode}_prof_0.html");
+                        string balanceResponse = File.ReadAllText($"{CompanyCacheDir}{companyCode}_bal_0.html");
+                        new MoneyControlHtmlManager(profitResponse, balanceResponse, marketCapData, allData).PopulateCompanyDetails(companyCode, addAllYears);
                     }
-                }
-                var csv = MoneyControlHtmlManager.GetCsv(marketCapData);
+                // }
+
+                var csv = MoneyControlHtmlManager.GetCsv(allData);
                 File.AppendAllText($"{CacheDir}Results.csv", csv);
             }
-            catch (FileNotFoundException ex)
+            catch (Exception ex)
             {
                 Console.WriteLine(ex.ToString());
             }
